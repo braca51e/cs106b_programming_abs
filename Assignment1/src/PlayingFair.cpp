@@ -13,7 +13,7 @@ string aSequenceOfOrder(int n) {
      */
     //(void) n;
     //return "";
-
+    cout << "order: " << n << endl;
     if(n < 0)
         error("Negative numbers are not allowed!");
     if(n == 0){
@@ -21,20 +21,25 @@ string aSequenceOfOrder(int n) {
     }
 
     string ret;
-    ret = aSequenceOfOrder(n-1) + "B";
+    ret = aSequenceOfOrder(n-1) + bSequenceOfOrder(n-1);
     cout << "Called aSequenceOfOrder " << ret << endl;
     return ret;
-
 }
 
 string bSequenceOfOrder(int n) {
     /* TODO: The next few lines just exist to make sure you don't get compiler warning messages
      * when this function isn't implemented. Delete these lines, then implement this function.
      */
-    (void) n;
-    return "";
-    //if(n < 0)
-    //    error("Negative numbers are not allowed!");
+    //(void) n;
+    //return "";
+    if(n < 0)
+        error("Negative numbers are not allowed!");
+    if(n == 0){
+        return "B";
+    }
+    string ret;
+    ret = bSequenceOfOrder(n-1) + aSequenceOfOrder(n-1);
+    return ret;
 }
 
 
