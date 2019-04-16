@@ -1,0 +1,43 @@
+Task: Measure Flour
+  Duration: 1m
+  Depends On: 
+
+Task: Measure Sugar
+  Duration: 30s
+  Depends On:
+
+Task: Measure Baking Powder
+  Duration: 1m15s
+  Depends On:
+
+Task: Measure Salt
+  Duration: 15s
+  Depends On:
+
+Task: Heat Griddle
+  Duration: 2m
+  Depends On:
+
+Task: Beat Egg
+  Duration: 2m
+  Depends On:
+
+Task: Melt Butter
+  Duration: 2m
+  Depends On:
+
+Task: Combine Dry Ingredients
+  Duration: 1m
+  Depends On: Measure Flour, Measure Sugar, Measure Baking Powder, Measure Salt
+
+Task: Add Wet Ingredients
+  Duration: 1m
+  Depends On: Combine Dry Ingredients, Melt Butter, Beat Egg
+
+Task: Oil Griddle
+  Duration: 15s
+  Depends On: Heat Griddle
+
+Task: Make Pancakes
+  Duration: 10m
+  Depends On: Oil Griddle, Add Wet Ingredients

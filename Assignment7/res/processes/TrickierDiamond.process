@@ -1,0 +1,16 @@
+Task: Divide Work
+  Duration: 2m
+  Depends On:
+  
+Task: Handle Group A
+  Duration: 2m
+  Depends On: Divide Work
+
+Task: Handle Group B
+  Duration: 2m
+  Depends On: Divide Work
+
+Task: Combine Work
+  Duration: 2m
+  Depends On: Handle Group A, Handle Group B
+

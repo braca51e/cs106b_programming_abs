@@ -1,0 +1,92 @@
+Task: CS106A
+  Duration: 10w
+  Depends On:
+
+Task: CS106B
+  Duration: 10w
+  Depends On: CS106A
+
+Task: CS103
+  Duration: 10w
+  Depends On: CS106B
+
+Task: CS107
+  Duration: 10w
+  Depends On: CS106B
+
+Task: CS109
+  Duration: 10w
+  Depends On: CS103, CS106B, Math 51
+
+Task: CS110
+  Duration: 10w
+  Depends On: CS107
+
+Task: CS161
+  Duration: 10w
+  Depends On: CS103, CS106B, CS109
+  
+Task: Calculus
+  Duration: 10w
+  Depends On:
+
+Task: Math 51
+  Duration: 10w
+  Depends On: Calculus
+
+Task: Ethics
+  Duration: 10w
+  Depends On: CS106B
+
+Task: Track A
+  Duration: 10w
+  Depends On: CS107, CS109
+
+Task: Track B 1
+  Duration: 10w
+  Depends On: Track A
+
+Task: Track B 2
+  Duration: 10w
+  Depends On: Track A
+
+Task: Track C 1
+  Duration: 10w
+  Depends On: Track B 1, Track B 2
+
+Task: Track C 2
+  Duration: 10w
+  Depends On: Track B 1, Track B 2
+  
+Task: Track C 3
+  Duration: 10w
+  Depends On: Track B 1, Track B 2
+  
+Task: Math Elect.
+  Duration: 10w
+  Depends On: Math 51
+
+Task: Science Elect.
+  Duration: 20w
+  Depends On: Calculus
+
+Task: Senior Project
+  Duration: 10w
+  Depends On: CS110, CS161
+
+Task: Graduate!
+  Duration: 1d
+  Depends On: CS110, CS161, Track C 1, Track C 2, Track C 3, Math Elect., Science Elect., Senior Project, Ethics
+  
+Task: Do Research!
+  Duration: 30w
+  Depends On: CS103, CS107
+  
+Task: Section Lead!
+  Duration: 20w
+  Depends On: CS106B
+  
+Task: Internship!
+  Duration: 12w
+  Depends On: CS106B
+  

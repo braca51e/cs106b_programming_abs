@@ -1,0 +1,31 @@
+Task: House Passes Legislation
+  Duration: 1w
+  Depends On:
+
+Task: Senate Passes Legislation
+  Duration: 2w
+  Depends On:
+
+Task: Conference Committee
+  Duration: 3d
+  Depends On: House Passes Legislation, Senate Passes Legislation
+
+Task: House Approves Revisions
+  Duration: 1w
+  Depends On: Conference Committee
+
+Task: Senate Approves Revisions
+  Duration: 1w
+  Depends On: Conference Committee
+
+Task: Presidential Veto
+  Duration: 10d
+  Depends On: House Approves Revisions, Senate Approves Revisions
+
+Task: House Override Vote
+  Duration: 1w
+  Depends On: Presidential Veto
+
+Task: Senate Override Vote
+  Duration: 2d
+  Depends On: Presidential Veto

@@ -1,0 +1,28 @@
+Task: Create Group A
+  Duration: 2h
+  Depends On:
+
+Task: Create Group B
+  Duration: 2h
+  Depends On:
+
+Task: Handle Intersection
+  Duration: 2h
+  Depends On: Create Group A, Create Group B
+  
+Task: Handle A - B
+  Duration: 2h
+  Depends On: Create Group A
+
+Task: Handle B - A
+  Duration: 2h
+  Depends On: Create Group B
+
+Task: Finalize Group A
+  Duration: 2h
+  Depends On: Handle Intersection, Handle A - B
+
+Task: Finalize Group B
+  Duration: 2h
+  Depends On: Handle Intersection, Handle B - A
+
