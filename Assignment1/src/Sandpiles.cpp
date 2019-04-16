@@ -10,14 +10,25 @@ void dropSandOn(Grid<int>& world, int row, int col) {
     /* TODO: The next few lines just exist to make sure you don't get compiler warning messages
      * when this function isn't implemented. Delete these lines, then implement this function.
      */
-    (void) world;
-    (void) row;
-    (void) col;
+    //(void) world;
+    //(void) row;
+    //(void) col;
+    if(world.inBounds(row,col)){
+        world[row][col] += 1;
+        if(world[row][col] == 4){
+            //empty cell
+            world[row][col] = 0;
+            //left
+            dropSandOn(world, row, col-1);
+            //right
+            dropSandOn(world, row, col+1);
+            //up
+            dropSandOn(world, row-1, col);
+            //down
+            dropSandOn(world, row+1, col);
+        }
+    }
 }
-
-
-
-
 
 
 /* * * * * * Tests Below This Point * * * * * */
