@@ -6,13 +6,52 @@
 #include "Testing/FleschKincaidTests.h"
 #include <sstream> // For the stringstream type used in testing
 using namespace std;
+const string vowels = "AaEeIiOoUuYy";
+
+int countSyllables(string& word){
+    int count = 0;
+    char prev = 'n';
+    for (string::iterator it = word.begin() ; it != word.end(); ++it) {
+        if(vowels.find(*it) <= vowels.size() &&
+                !(vowels.find(prev) <= vowels.size())){
+                    count += 1;
+        }
+        prev = *it;
+    }
+
+    if(count == 0)
+        count += 1;
+
+    cout << "Syllable count: " << count << " word end: " <<  word[word.size()-1] << endl;
+    return count;
+}
 
 DocumentInfo statisticsFor(istream& source) {
     /* TODO: The next few lines just exist to make sure you don't get compiler warning messages
      * when this function isn't implemented. Delete these lines, then implement this function.
      */
-    (void) source;
-    return { 0, 0, 0 };
+    //(void) source;
+    DocumentInfo ret = {0,0,0};
+
+    TokenScanner scanner(source);
+    scanner.ignoreWhitespace();
+    while(scanner.hasMoreTokens()){
+        string token = scanner.nextToken();
+        if(isalpha(token.front())){
+             ret.numSyllables += countSyllables(token);
+             ret.numWords += 1;
+        }
+        else{
+            if(token.compare(0,1, ".") == 0  ||
+                token.compare(0,1, "!") == 0 ||
+                    token.compare(0,1, "?") == 0){
+
+                        ret.numSentences += 1;
+            }
+        }
+    }
+
+    return ret;
 }
 
 

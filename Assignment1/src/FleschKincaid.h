@@ -3,6 +3,8 @@
 
 #include <string>
 #include <istream>
+#include "tokenscanner.h"
+#include <cctype>
 
 /**
  * Type: DocumentInfo
@@ -24,5 +26,7 @@ struct DocumentInfo {
  * @return A DocumentInfo struct containing information about that file.
  */
 DocumentInfo statisticsFor(std::istream& source);
+
+int countSyllables(std::string& word);
 
 #endif
