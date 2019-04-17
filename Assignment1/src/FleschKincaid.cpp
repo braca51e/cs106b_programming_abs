@@ -22,7 +22,6 @@ int countSyllables(string& word){
     if(count == 0)
         count += 1;
 
-    cout << "Syllable count: " << count << " word end: " <<  word[word.size()-1] << endl;
     return count;
 }
 
@@ -50,6 +49,13 @@ DocumentInfo statisticsFor(istream& source) {
             }
         }
     }
+
+    if(ret.numSyllables == 0)
+        ret.numSyllables = 1;
+    if(ret.numSentences == 0)
+        ret.numSentences = 1;
+    if(ret.numWords == 0)
+        ret.numWords = 1;
 
     return ret;
 }
