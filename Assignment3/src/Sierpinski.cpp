@@ -31,4 +31,5 @@ void drawSierpinskiTriangle(GWindow& window,
     (void) p1;
     (void) p2;
     (void) order;
+    drawTriangle(window, p0, p1, p2);
 }
