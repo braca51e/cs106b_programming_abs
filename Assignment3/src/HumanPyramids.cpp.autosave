@@ -22,7 +22,10 @@ int weightOnBackOf(int row, int col) {
         error("Out of bounds!");
     }
 
-
+    if(row == 0 && col == 0)
+        return 0;
+    
+    return 160*rowweightOnBackOf(row, col)
 }
 
 /* * * * * * Test Cases * * * * * */

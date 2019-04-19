@@ -17,4 +17,6 @@
  */
 int weightOnBackOf(int row, int col);
 
+bool inBounds(int row, int col);
+
 #endif
