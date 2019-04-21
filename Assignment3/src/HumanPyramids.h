@@ -15,6 +15,7 @@
  * @param col The zero-indexed column of the person in the pyramid.
  * @return The weight on the back of that person.
  */
+
 int weightOnBackOf(int row, int col);
 
 bool inBounds(int row, int col);
