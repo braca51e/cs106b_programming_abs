@@ -15,6 +15,23 @@
  * @param col The zero-indexed column of the person in the pyramid.
  * @return The weight on the back of that person.
  */
+class Human{
+    int row;
+    int col;
+public:
+    Human(int row_, int col_):row(row_), col(col_)
+    {}
+    const int& getRow() const{
+        return row;
+    }
+    const int& getCol() const{
+        return col;
+    }
+    bool operator<(const Human& humanCmp)const{
+        //return (this->row < humanCmp.row && this->col < humanCmp.col);
+        return (this->row < humanCmp.row);
+    }
+};
 
 int weightOnBackOf(int row, int col);
 

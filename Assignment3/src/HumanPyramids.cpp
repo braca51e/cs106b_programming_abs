@@ -2,12 +2,7 @@
 #include "Testing/HumanPyramidTests.h"
 using namespace std;
 
-struct element{
-    int row;
-    int col;
-};
-
-//int weightOnBackOfMemo(int row, int col, map<element, int>& table);
+int weightOnBackOfMemo(int row, int col, map<Human, int>& table);
 
 /* TODO: Refer to HumanPyramids.h for more information about what this function should do.
  * Then, delete this comment.
@@ -20,12 +15,12 @@ bool inBounds(int row, int col){
     }
 }
 
-/*int weightOnBackOf(int row, int col) {
-    map<element, int> table;
-    return weightOnBackOfMemo(row, col, table);
-}*/
-//No memoization solution
 int weightOnBackOf(int row, int col) {
+    map<Human, int> table;
+    return weightOnBackOfMemo(row, col, table);
+}
+//No memoization solution
+/*int weightOnBackOf(int row, int col) {
 
     if(!inBounds(row,col)){
         error("Out of bounds!");
@@ -43,32 +38,40 @@ int weightOnBackOf(int row, int col) {
         else
             return 80+(weightOnBackOf(row-1, col-1))/2 + 80+(weightOnBackOf(row-1, col))/2;
     }
-}
+}*/
 
-/*int weightOnBackOfMemo(int row, int col, map<element, int>& table){
+int weightOnBackOfMemo(int row, int col, map<Human, int>& table){
+
     if(!inBounds(row,col)){
         error("Out of bounds!");
     }
     //base case
+    Human humanTmp(row, col);
     if(row == 0 && col == 0 )
         return 0;
-    else if(table.find({row, col}) != table.end())
-        return table[{row,col}];
+    else if(table.find(humanTmp) != table.end()){
+        cout << "found: " << humanTmp.getRow() << " " << humanTmp.getCol() << endl;
+        cout << "found in table: " << table[humanTmp] << endl;
+        return table[humanTmp];
+    }
     else{
         //first check for side lines
         int weight = 0;
         if(col == 0)
-            weight = 80+(weightOnBackOf(row-1, col))/2;
+            return 80+(weightOnBackOfMemo(row-1, col, table))/2;
         else if(row == col)
-            weight = 80+(weightOnBackOf(row-1, col-1))/2;
+            return 80+(weightOnBackOfMemo(row-1, col-1, table))/2;
         //solve middle points
-        else
-            weight = 80+(weightOnBackOf(row-1, col-1))/2 + 80+(weightOnBackOf(row-1, col))/2;
-
-        table.insert(pair<element, int>({row,col}, weight));
+        else{
+            cout << "Inserting: " << humanTmp.getRow() << " " << humanTmp.getCol() << " " << weight << endl;
+            cout << "table: " << table.size() << endl;
+            //table[humanTmp] = 80+(weightOnBackOfMemo(row-1, col-1, table))/2 + 80+(weightOnBackOfMemo(row-1, col, table))/2;;
+            return 80+(weightOnBackOfMemo(row-1, col-1, table))/2 + 80+(weightOnBackOfMemo(row-1, col, table))/2;
+        }
+            //cout << "inserted in table: " << table[humanTmp] << endl;
         return weight;
     }
-}*/
+}
 
 /* * * * * * Test Cases * * * * * */
 
