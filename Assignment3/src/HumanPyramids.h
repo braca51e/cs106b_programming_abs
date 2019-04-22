@@ -29,7 +29,7 @@ public:
     }
     bool operator<(const Human& humanCmp)const{
         //return (this->row < humanCmp.row && this->col < humanCmp.col);
-        return (this->row < humanCmp.row);
+        return row < humanCmp.row || (row == humanCmp.row && col < humanCmp.col);;
     }
 };
 

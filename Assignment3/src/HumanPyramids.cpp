@@ -50,25 +50,20 @@ int weightOnBackOfMemo(int row, int col, map<Human, int>& table){
     if(row == 0 && col == 0 )
         return 0;
     else if(table.find(humanTmp) != table.end()){
-        cout << "found: " << humanTmp.getRow() << " " << humanTmp.getCol() << endl;
-        cout << "found in table: " << table[humanTmp] << endl;
         return table[humanTmp];
     }
     else{
         //first check for side lines
         int weight = 0;
         if(col == 0)
-            return 80+(weightOnBackOfMemo(row-1, col, table))/2;
+            weight = 80+(weightOnBackOfMemo(row-1, col, table))/2;
         else if(row == col)
-            return 80+(weightOnBackOfMemo(row-1, col-1, table))/2;
+            weight = 80+(weightOnBackOfMemo(row-1, col-1, table))/2;
         //solve middle points
         else{
-            cout << "Inserting: " << humanTmp.getRow() << " " << humanTmp.getCol() << " " << weight << endl;
-            cout << "table: " << table.size() << endl;
-            //table[humanTmp] = 80+(weightOnBackOfMemo(row-1, col-1, table))/2 + 80+(weightOnBackOfMemo(row-1, col, table))/2;;
-            return 80+(weightOnBackOfMemo(row-1, col-1, table))/2 + 80+(weightOnBackOfMemo(row-1, col, table))/2;
+            weight = table[humanTmp] = 80+(weightOnBackOfMemo(row-1, col-1, table))/2 + 80+(weightOnBackOfMemo(row-1, col, table))/2;;
         }
-            //cout << "inserted in table: " << table[humanTmp] << endl;
+
         return weight;
     }
 }
