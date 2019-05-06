@@ -6,16 +6,25 @@ using namespace std;
 /* TODO: Refer to ShiftScheduling.h for more information about what this function should do.
  * Then, delete this comment.
  */
+
+Set<Shift> highestValueScheduleForHelp(const Set<Shift>& shifts, int maxHours, Set<Shift>& chosen) {
+    //base case
+    //shift is empty or max houseris bigger that current shift
+    if(shifts.isEmpty() || maxHours <= 0)
+        return chosen;
+    //do backtracking
+    //select
+    for(Set<Shift>::iterator it=shifts.begin(); it != shifts.end();it++){
+        chosen.add(*it);
+    }
+
+}
 Set<Shift> highestValueScheduleFor(const Set<Shift>& shifts, int maxHours) {
     /* TODO: Delete the next few lines and implement this function. */
-    (void) shifts;
-    (void) maxHours;
-    return {};
+    //base case
+    Set<Shift> chosen;
+    return highestValueScheduleForHelp(shifts, maxHours, chosen);
 }
-
-
-
-
 
 /* * * * * * Test Cases * * * * * */
 
