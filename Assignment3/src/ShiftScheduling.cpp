@@ -7,23 +7,77 @@ using namespace std;
  * Then, delete this comment.
  */
 
-Set<Shift> highestValueScheduleForHelp(const Set<Shift>& shifts, int maxHours, Set<Shift>& chosen) {
+//Use to get all possible groups of shifts
+Set<Shift> highestValueScheduleForHelp(Set<Shift>& shifts, int maxHours, Set<Shift>& chosen, Set<Shift>& best) {
     //base case
     //shift is empty or max houseris bigger that current shift
-    if(shifts.isEmpty() || maxHours <= 0)
-        return chosen;
+    //cout << "shifts size: " << shifts.size() << endl;
+    if(shifts.isEmpty()){
+        if(maxHours >= 0){
+            //cout << "chosen: " << chosen << endl;
+            int maxInShift = 0;
+            int maxInBest = 0;
+            for(Set<Shift>::iterator it=chosen.begin(); it!=chosen.end(); it++){
+                maxInShift += valueOf(*it);
+            }
+            for(Set<Shift>::iterator it=best.begin(); it!=best.end(); it++){
+                maxInBest += valueOf(*it);
+            }
+            if(maxInShift >= maxInBest)
+                best = chosen;
+        }
+        return best;
+    }
     //do backtracking
     //select
-    for(Set<Shift>::iterator it=shifts.begin(); it != shifts.end();it++){
-        chosen.add(*it);
+    //Create a sub-group of shifts
+    Shift s_tmp = shifts.front();
+    shifts.remove(s_tmp);
+    //cout << "shifts size: " << shifts.size() << endl;
+
+    //choose/explore
+    //try without this shift
+    highestValueScheduleForHelp(shifts, maxHours, chosen, best);
+
+    //try with this shiift
+    //TODO check for overlaps before trying and there is time for it
+    bool overlaps = false;
+    for(Set<Shift>::iterator it=chosen.begin(); it!=chosen.end(); it++){
+        if(overlapsWith(*it, s_tmp) || (maxHours - lengthOf(s_tmp)) < 0){
+            overlaps = true;
+            break;
+        }
+    }
+    if(!overlaps){
+        chosen.add(s_tmp);
+        highestValueScheduleForHelp(shifts, maxHours - lengthOf(s_tmp), chosen, best);
     }
 
+    //unchoose
+    shifts.add(s_tmp);
+    chosen.remove(s_tmp);
+
+    return chosen;
+
 }
+
 Set<Shift> highestValueScheduleFor(const Set<Shift>& shifts, int maxHours) {
     /* TODO: Delete the next few lines and implement this function. */
     //base case
+    if(maxHours < 0)
+        error("maxHouers should not be negative!");
+
     Set<Shift> chosen;
-    return highestValueScheduleForHelp(shifts, maxHours, chosen);
+    Set<Shift> best;
+    Set<Shift> local_shifts;
+    for(Set<Shift>::iterator it=shifts.begin(); it != shifts.end(); it++){
+        local_shifts.add(*it);
+    }
+    //cout << "local_shifts!!!!!: " << local_shifts << endl;
+    //cout << "Initiali maxHours!!!!!!: " << maxHours << endl;
+    highestValueScheduleForHelp(local_shifts, maxHours, chosen, best);
+    //cout << "best shift: " << best << endl;
+    return best;
 }
 
 /* * * * * * Test Cases * * * * * */
