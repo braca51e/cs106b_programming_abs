@@ -11,15 +11,70 @@ int distanceBetween(const Point& p1, const Point& p2) {
 /* TODO: Refer to RidingCircuit.h for more information about what this function should do.
  * Then, delete this comment.
  */
-Vector<Point> bestCircuitThrough(const Vector<Point>& cities) {
-    /* TODO: Delete the next few lines and implement this function. */
-    (void) cities;
-    return {};
+
+//Make all possible ombinations of cities
+Vector<Point> bestCircuitThroughHelp(Vector<Point>& cities, Vector<Point>& chosen, Vector<Point>& best){
+    //base case
+    Vector<Point> ret;
+    if(cities.isEmpty()){
+        if(best.isEmpty()){
+            best = chosen;
+        }
+        else{
+            cout << "chosen: " << chosen << endl;
+            //Compute whole cost(distance of doing this route)
+            auto new_distance = 0;
+            for(auto i=0; i < chosen.size()-1; ++i){
+                new_distance += distanceBetween(chosen[i], chosen[i+1]);
+            }
+            //Add return
+            new_distance += distanceBetween(chosen[chosen.size()-1], chosen[0]);
+            auto best_distance = 0;
+            for(auto i=0; i < best.size()-1; ++i){
+                best_distance += distanceBetween(best[i], best[i+1]);
+            }
+            //Add return
+            best_distance += distanceBetween(best[best.size()-1], best[0]);
+            if(new_distance <= best_distance || best.isEmpty()){
+                best = chosen;
+            }
+        }
+        return best;
+       }
+    //explore
+    //chose
+    for (auto i=0; i < cities.size(); ++i) {
+
+        Point tmp_point = cities[i];
+        cities.remove(i);
+        chosen.push_back(tmp_point);
+        //backtrack
+        bestCircuitThroughHelp(cities, chosen, best);
+        //unchose
+        chosen.pop_back();
+        cities.insert(i, tmp_point);
+    }
+    return ret;
 }
 
+Vector<Point> bestCircuitThrough(const Vector<Point>& cities) {
+    /* TODO: Delete the next few lines and implement this function. */
+    //(void) cities;
+    Vector<Point> tmp_cities;
+    Vector<Point> chosen;
+    Vector<Point> best;
 
+    for(auto i=0; i < cities.size(); ++i){
+        tmp_cities.push_back(cities[i]);
+    }
+    //Cities
+    cout << "Cities: " << tmp_cities << endl;
+    //check all possible cobinations
+    bestCircuitThroughHelp(tmp_cities, chosen, best);
+    cout << "best: " << best << endl;
 
-
+    return best;
+}
 
 /* * * * * * Test Cases * * * * * */
 
