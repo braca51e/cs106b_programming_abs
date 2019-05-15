@@ -26,54 +26,57 @@ Vector<Patient> subGroupOfPatients(Vector<Patient>& patients, Vector<Patient>& c
     return chosen;
 }
 bool canAllPatientsBeSeenHelp( Vector<Doctor>& doctors,
-                           Vector<Patient>& patients,
-                           Map<string, Set<string>>& schedule) {
+                               Vector<Patient>& patients,
+                               Vector<Patient>& pats_chosen,
+                               Map<string, Set<string>>& schedule) {
     /* TODO: Delete the next few lines and implement this function. */
     //base cases
     //there is no doctors available
-    if(doctors.size() == 0 && patients.size() > 0){
-        return false;
-    }
-    else if(doctors.size() >= 0 && patients.size() == 0){
-        return true;
+    if(patients.isEmpty()){
+        cout << "patients chosen: " << pats_chosen << endl;
+        //cout << "doctors: " << doctors << endl;
+        return doctors.size() > 0 ? true : false;
     }
     else{
-        //exlpore
-        //choose  a doctor
-        Vector<Doctor> tmp_doctors_y = doctors;
-        Vector<Doctor> tmp_doctors_n = doctors;
-        Vector<Patient> tmp_patients_y = patients;
-        Vector<Patient> tmp_patients_n = patients;
-        Doctor tmp_doc;
-        //chose
-        tmp_doc = tmp_doctors_y.front();
 
-        //YES try
-        //try to assign doctors to patients
-        for(auto j=0; j < tmp_patients_y.size(); ++j){
-            Patient tmp_pat = tmp_patients_y.front();
-            if(tmp_doc.hoursFree >= tmp_pat.hoursNeeded){
-                tmp_doc.hoursFree -= tmp_pat.hoursNeeded;
-                //unchoose patients
-                tmp_patients_y.pop_front();
-            }
-        }
-        //recover doctor
-        tmp_doctors_y.pop_front();
+        //explore all doctor combinations
         bool ret = false;
-        ret = canAllPatientsBeSeenHelp(tmp_doctors_y, tmp_patients_y, schedule);
-        cout << "ret yes: " << ret << endl;
-        //NO
-        ret = canAllPatientsBeSeenHelp(tmp_doctors_y, tmp_patients_y, schedule);
-        tmp_doc = tmp_doctors_n.front();
-        tmp_doctors_n.pop_front();
-        if((!tmp_doctors_n.isEmpty()) && tmp_patients_y.size() != patients.size()){
-            tmp_doctors_n.push_back(tmp_doc);
+        for(auto i = 0; i < patients.size(); ++i){
+            //choose
+            Vector<Doctor> tmp_doctors;
+            Patient tmp_patient = patients[i];
+            //Doctor tmp_doctor = tmp_doctors.front();
+            patients.remove(i);
+            pats_chosen.push_front(tmp_patient);
+            //Make sure this patient is seen
+            //Pop doctor free that cannot see this patient
+            bool seen = false;
+            for(auto i = 0 ; i < doctors.size(); ++i)
+            {
+                Doctor tmp_doc = doctors[i];
+                if(doctors[i].hoursFree >= tmp_patient.hoursNeeded && !seen){
+                    tmp_doc.hoursFree -= tmp_patient.hoursNeeded;
+                    Set<string> tmp_set = schedule.get(tmp_doc.name);
+                    tmp_set.add(tmp_patient.name);
+                    schedule.add(tmp_doc.name, tmp_set);
+                    tmp_doctors.add(tmp_doc);
+                    seen = true;
+                }
+                else if(seen) {
+                    tmp_doctors.add(tmp_doc);
+                }
+            }
+            //backtrack
+            ret = canAllPatientsBeSeenHelp(tmp_doctors,
+                                     patients,
+                                     pats_chosen,
+                                     schedule);
+            //unchoose
+            pats_chosen.pop_front();
+            patients.insert(i, tmp_patient);
+            if(ret)
+                break;
         }
-        if(!ret){
-            ret = canAllPatientsBeSeenHelp(tmp_doctors_n, tmp_patients_n, schedule);
-        }
-        cout << "ret no: " << ret << endl;
         return ret;
     }
 }
@@ -82,29 +85,24 @@ bool canAllPatientsBeSeen(const Vector<Doctor>& doctors,
                           const Vector<Patient>& patients,
                           Map<string, Set<string>>& schedule) {
     /* TODO: Delete the next few lines and implement this function. */
-    //(void) doctors;
-    //(void) patients;
-    //(void) schedule;
     Vector<Doctor> lcl_doctors;
+    Vector<Patient> pats_chosen;
     Vector<Patient> lcl_patients;
     Map<string, Set<string>> chosen;
     for(auto i=0; i < doctors.size(); ++i){
         lcl_doctors.push_back(doctors[i]);
+        if(!schedule.keys().contains(doctors[i].name)){
+            Set<string> tmp_set;
+            schedule.add(doctors[i].name, tmp_set);
+        }
     }
     for(auto i=0; i < patients.size(); ++i){
         lcl_patients.push_back(patients[i]);
     }
     bool ret;
-    ret = canAllPatientsBeSeenHelp(lcl_doctors, lcl_patients, schedule);
-    cout << "allpatientsSeen: " << ret << endl;
-    //get patient subsets
-    //Vector<Patient> chosen_sub_p;
-    //Set<Vector<Patient>> subsets_p;
-    //subGroupOfPatients(lcl_patients, chosen_sub_p, subsets_p);
-    //for (auto it=subsets_p.begin(); it != subsets_p.end(); ++it) {
-    //    cout << "sub_patients: " << *it << endl;
-    //}
-
+    ret = canAllPatientsBeSeenHelp(lcl_doctors, lcl_patients, pats_chosen, schedule);
+    //cout << "allpatientsSeen: " << ret << endl;
+    cout << "schedule: " << schedule << endl;
     return ret;
 }
 
@@ -114,19 +112,18 @@ bool canAllPatientsBeSeen(const Vector<Doctor>& doctors,
     Map<string, Set<string>> schedule;
 
     Vector<Doctor> doctors = {
-        { "Dr. Thomas", 9 },
+        { "Dr. Thomas", 2 },
         { "Dr. Taussig", 3 },
-        { "Dr. Sacks", 8 },
     };
     Vector<Patient> patients = {
         { "Lacks 1", 3 },
-        { "Lacks 2", 10 },
+
     };
 
     EXPECT(canAllPatientsBeSeen(doctors, patients, schedule));
-}*/
+}
 
-/*ADD_TEST("A patient requiring more hours than available prevents solutions.") {
+ADD_TEST("A patient requiring more hours than available prevents solutions.") {
     Map<string, Set<string>> schedule;
 
     Vector<Doctor> doctors = {
@@ -169,9 +166,11 @@ ADD_TEST("Example from handout.") {
 
     Vector<Doctor> doctors = {
         { "Dr. Sacks", 8 },
+        { "Dr. Taussig", 6 },
     };
     Vector<Patient> patients = {
-        { "Lacks 2", 10 },
+        { "Lacks", 6 },
+        { "Giese", 8 },
     };
 
     EXPECT(canAllPatientsBeSeen(doctors, patients, schedule));
