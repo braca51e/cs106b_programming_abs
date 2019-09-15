@@ -5,10 +5,57 @@ using namespace std;
 /* TODO: Refer to MultiwayMerge.h for more information about what this function does,
  * then delete this comment.
  */
+Vector<DataPoint> merge(Vector<DataPoint> left, Vector<DataPoint> right){
+    Vector<DataPoint> ret;
+    //get largest size
+    DataPoint p_l;
+    DataPoint p_r;
+    while (left.size() > 0 && right.size() > 0) {
+        p_l = left.pop_front();
+        p_r = right.pop_front();
+
+        if(p_l.weight >= p_r.weight){
+            ret.push_back(p_r);
+            //push back in left
+            left.push_front(p_l);
+        }
+        else{
+            ret.push_back(p_l);
+            //push back in right
+            right.push_front(p_r);
+        }
+    }
+    //left reamins with bigger elements
+    if(left.size() > 0){
+        ret += left;
+    }
+
+    if(right.size() > 0){
+        ret += right;
+    }
+
+    return ret;
+}
+
 Vector<DataPoint> mergeSequences(const Vector<Vector<DataPoint>>& sequences) {
-    /* TODO: Delete the next few lines and implement this. */
-    (void) sequences;
-    return {};
+    if(sequences.size() == 1){
+            return sequences[0];
+        }
+    else if(sequences.size() < 1){
+        return {};
+    }
+    else{
+        Vector<Vector<DataPoint>> left, right;
+        Vector<DataPoint> left_m, right_m;
+        //split sequences 2 groups
+        left = sequences.subList(0, sequences.size()/2);
+        right = sequences.subList(sequences.size()/2, sequences.size()-(sequences.size()/2));
+        //Recursively merge each group
+        left_m = mergeSequences(left);
+        right_m = mergeSequences(right);
+        //Merge final sequences
+        return merge(left_m, right_m);
+    }
 }
 
 /* * * * * * Tests Below This Point * * * * * */

@@ -7,15 +7,26 @@ using namespace std;
  */
 int lowerBoundOf(const Vector<DataPoint>& points, int key) {
     /* TODO: Delete the next few lines and implement this. */
-    (void) points;
-    (void) key;
-    return 0;
+    //if out of bounds
+    cout << "points: " << points << endl;
+    cout << "key: " << key << endl;
+    if(points.size() > key){
+        return points.size();
+    }
+    //perform binary search
+    //indexing begins at 0
+    int middle = (points.size()/2) - 1;
+    DataPoint m_point = points[middle];
+    if(m_point.weight == key){
+        return middle;
+    }
+    else if(m_point.weight > key){
+        return lowerBoundOf(points.subList(0, middle), key);
+    }
+    else{
+        return lowerBoundOf(points.subList(middle, points.size()), key);
+    }
 }
-
-
-
-
-
 
 /* * * * * * Test Cases Below This Point * * * * * */
 
